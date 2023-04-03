@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k6-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k6-app
+  template:
+    metadata:
+      labels:
+        app: k6-app
+    spec:
+      containers:
+      - name: k6
+        image: grafana/k6
+        command: ["k6", "run", "-c", "/config/k6.config.json", "/script/k6.js"]
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: script
+          mountPath: /script
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: script
+        configMap:
+          name: k6-script
+      - name: config
+        configMap:
+          name: k6-config

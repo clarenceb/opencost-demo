@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k6-config
+data:
+  k6.config.json: |
+    {
+      "vus": 1,
+      "duration": "30s"
+    }
